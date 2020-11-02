@@ -8,8 +8,10 @@ const fetchAreas = () => {
 }
 
 const addAreas = (newArea) => {
-    console.log(newArea, '<-----line 11 model')
-    return db.query('INSERT INTO area(name) VALUES $1;', [newArea.area.name])
+    
+    return db.query('INSERT INTO area (name) VALUES ($1) RETURNING *', [newArea.areas[0].name]).then((updatedArea) => {
+        return updatedArea.rows[0];
+    })
 }
 
 module.exports = { fetchAreas, addAreas };

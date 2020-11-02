@@ -14,10 +14,9 @@ const getAreas = (req, res, next) => {
 
 const postAreas = (req, res, next) => {
     const newArea = req.body
-    console.log(newArea, '<---- controllers')
-    addAreas(newArea).then(() => {
-        console.log(res)
-            (res.status(201).send())
+    console.log(newArea);
+    addAreas(newArea).then((area) => {
+        res.status(201).send(area)
     })
 }
 
