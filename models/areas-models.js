@@ -7,4 +7,9 @@ const fetchAreas = () => {
     })
 }
 
-module.exports = fetchAreas;
+const addAreas = (newArea) => {
+    console.log(newArea, '<-----line 11 model')
+    return db.query('INSERT INTO area(name) VALUES $1;', [newArea.area.name])
+}
+
+module.exports = { fetchAreas, addAreas };
