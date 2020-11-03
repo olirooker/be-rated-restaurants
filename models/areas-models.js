@@ -16,10 +16,8 @@ const addAreas = (newArea) => {
 
 const fetchRestaurantsByAreaId = (areaId) => {
     // join the area table and the restaurant table
-    console.log('anything', process.env.NODE_ENV)
-    return db.query('SELECT * FROM restaurants').then((response) => {
-        console.log(response)
-        return response
+    return db.query('SELECT * FROM restaurants INNER JOIN area ON restaurants.area_id = area.area_id WHERE restaurants.area_id = $1', [areaId]).then((response) => {
+        return response.row
     })
 }
 
