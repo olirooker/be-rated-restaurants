@@ -1,5 +1,5 @@
 const { response } = require('express')
-const { fetchAreas, addAreas } = require('../models/areas-models.js')
+const { fetchAreas, addAreas, fetchRestaurantsByAreaId } = require('../models/areas-models.js')
 
 const getAreas = (req, res, next) => {
     fetchAreas().then((areas) => {
@@ -14,10 +14,17 @@ const getAreas = (req, res, next) => {
 
 const postAreas = (req, res, next) => {
     const newArea = req.body
-    console.log(newArea);
+    console.log(newArea, '<<--- controller');
     addAreas(newArea).then((area) => {
         res.status(201).send(area)
     })
 }
 
-module.exports = { getAreas, postAreas }
+const getRestaurantsByAreaId = (req, res, next) => {
+    const areaId = req.params.area_id
+    fetchRestaurantsByAreaId(areaId).then((response) => {
+        res.status(200).send(response)
+    })
+}
+
+module.exports = { getAreas, postAreas, getRestaurantsByAreaId }

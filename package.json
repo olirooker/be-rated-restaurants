@@ -13,8 +13,9 @@
     "supertest": "^6.0.0"
   },
   "scripts": {
-    "test": "jest",
-    "dev": "nodemon listen.js"
+    "test": "npm run seed-test && jest",
+    "dev": "nodemon listen.js",
+    "seed-test": "psql -f db/build-restaurants.test.sql"
   },
   "repository": {
     "type": "git",

@@ -8,10 +8,19 @@ const fetchAreas = () => {
 }
 
 const addAreas = (newArea) => {
-    
-    return db.query('INSERT INTO area (name) VALUES ($1) RETURNING *', [newArea.areas[0].name]).then((updatedArea) => {
+
+    return db.query('INSERT INTO area (name) VALUES ($1) RETURNING *', [newArea.name]).then((updatedArea) => {
         return updatedArea.rows[0];
     })
 }
 
-module.exports = { fetchAreas, addAreas };
+const fetchRestaurantsByAreaId = (areaId) => {
+    // join the area table and the restaurant table
+    console.log('anything', process.env.NODE_ENV)
+    return db.query('SELECT * FROM restaurants').then((response) => {
+        console.log(response)
+        return response
+    })
+}
+
+module.exports = { fetchAreas, addAreas, fetchRestaurantsByAreaId };

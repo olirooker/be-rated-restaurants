@@ -1,4 +1,6 @@
 const app = require('../app.js');
+process.env.NODE_ENV = 'test';
+
 const request = require('supertest');
 const db = require('../db/index.js');
 const { response } = require('../app.js');
@@ -21,18 +23,22 @@ describe('app', () => {
         test('POST responds with status 201 and a json object', () => {
             return request(app)
                 .post('/api/areas')
-                .send({ areas: [ { area_id: 6, name: 'Endcliffe' } ] })
+                .send({ name: 'Endcliffe' })
                 .set('Accept', 'application/json')
                 .expect(201)
-                // .then((response) => {
-                //     // assert that the response is in the correct shape
-                //     expect(response.body).toMatchObject({ areas: expect.any(Array) })
-                //     expect(response.body.totalCount).toBe(5);
-                // })
+                .then((response) => {
+                    // assert that the response is in the correct shape
+                    expect(response.body).toHaveProperty('name', 'Endcliffe')
+                })
         })
-       
     })
-    
-       
+
+    describe('/areas/:area_id/restaurants', () => {
+        test('get responds with 200 and all restaurants in the given area', () => {
+            return request(app)
+                .get('/api/areas/1/restaurants')
+                .expect(200)
+        })
+    })
 
 })
