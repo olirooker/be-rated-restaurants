@@ -43,6 +43,17 @@ describe('app', () => {
                     expect(response.body.restaurantsByArea).toHaveProperty("area_id", 1);
                 })
         })
+
+        test('get responds with 404', () => {
+            return request(app)
+                .get('/api/areas/45678/restaurants')
+                .expect(404)
+                .then((response) => {
+                    console.log(response, '<---- test')
+                    expect(response.status).toBe(404);
+                    expect(response.body.msg).toBe('area not found')
+                })
+        })
     })
 
 })
