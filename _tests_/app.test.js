@@ -49,7 +49,7 @@ describe('app', () => {
                 .get('/api/areas/45678/restaurants')
                 .expect(404)
                 .then((response) => {
-                    console.log(response, '<---- test')
+                    // console.log(response, '<---- test')
                     expect(response.status).toBe(404);
                     expect(response.body.msg).toBe('area not found')
                 })
