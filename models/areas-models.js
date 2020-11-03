@@ -16,8 +16,25 @@ const addAreas = (newArea) => {
 
 const fetchRestaurantsByAreaId = (areaId) => {
     // join the area table and the restaurant table
-    return db.query('SELECT * FROM restaurants INNER JOIN area ON restaurants.area_id = area.area_id WHERE restaurants.area_id = $1', [areaId]).then((response) => {
-        return response.row
+    const restaurants = db.query('SELECT * FROM restaurants WHERE restaurants.area_id = $1', [areaId]).then((response) => {
+        return response.rows;
+    })
+
+    const restaurantCount = db.query('SELECT * FROM restaurants WHERE restaurants.area_id = $1', [areaId]).then((response) => {
+        return response.rowCount;
+    })
+
+    const areas = db.query('SELECT * FROM area WHERE area_id = $1', [areaId]).then((response) => {
+        return response.rows[0]
+    })
+    return Promise.all([areas, restaurantCount, restaurants]).then((response) => {
+        const newObj = {
+            area_id: response[0].area_id,
+            name: response[0].name,
+            total_restaurants: response[1],
+            restaurants: response[2],
+        }
+        return newObj;
     })
 }
 

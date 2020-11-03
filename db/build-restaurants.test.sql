@@ -41,7 +41,7 @@ CREATE TABLE ratings (
 -- put data in tables
 
 -- areas
-INSERT INTO area(name) VALUES ('Woodseats');
+INSERT INTO area(name) VALUES ('Woodseats'); 
 INSERT INTO area(name) VALUES ('Hunters Bar');
 
 

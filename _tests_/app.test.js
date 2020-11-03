@@ -38,6 +38,10 @@ describe('app', () => {
             return request(app)
                 .get('/api/areas/1/restaurants')
                 .expect(200)
+                .then((response) => {
+                    expect(response.body.restaurantsByArea).toMatchObject({ restaurants: expect.any(Array) })
+                    expect(response.body.restaurantsByArea).toHaveProperty("area_id", 1);
+                })
         })
     })
 

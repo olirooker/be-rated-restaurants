@@ -14,7 +14,6 @@ const getAreas = (req, res, next) => {
 
 const postAreas = (req, res, next) => {
     const newArea = req.body
-    console.log(newArea, '<<--- controller');
     addAreas(newArea).then((area) => {
         res.status(201).send(area)
     })
@@ -22,8 +21,11 @@ const postAreas = (req, res, next) => {
 
 const getRestaurantsByAreaId = (req, res, next) => {
     const areaId = req.params.area_id
-    fetchRestaurantsByAreaId(areaId).then((response) => {
-        res.status(200).send(response)
+    fetchRestaurantsByAreaId(areaId).then((restaurantsByArea) => {
+        console.log({restaurantsByArea})
+        res.status(200).send({restaurantsByArea})
+    }).catch(err => {
+        next(err);
     })
 }
 
