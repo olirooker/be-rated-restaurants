@@ -25,10 +25,11 @@ const postAreas = (req, res, next) => {
 };
 
 const getRestaurantsByAreaId = (req, res, next) => {
-  const areaId = req.params.area_id;
-  fetchRestaurantsByAreaId(areaId)
+  const { area_id } = req.params;
+  const { cuisine } = req.query;
+
+  fetchRestaurantsByAreaId(area_id, cuisine)
     .then((restaurantsByArea) => {
-      console.log({ restaurantsByArea });
       res.status(200).send({ restaurantsByArea });
     })
     .catch((err) => {

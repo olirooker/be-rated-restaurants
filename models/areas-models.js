@@ -14,8 +14,10 @@ const addAreas = (newArea) => {
     });
 };
 
-const fetchRestaurantsByAreaId = (areaId) => {
+const fetchRestaurantsByAreaId = (areaId, cuisine) => {
   // join the area table and the restaurant table
+
+  console.log(cuisine, 'in models');
 
   const areas = db
     .query('SELECT * FROM area WHERE area_id = $1', [areaId])
@@ -23,7 +25,6 @@ const fetchRestaurantsByAreaId = (areaId) => {
       return response.rows;
     })
     .then((response) => {
-      console.log(response);
       if (Object.values(response).length === 0) {
         return Promise.reject({ status: 404, msg: 'area not found' });
       }
@@ -33,7 +34,15 @@ const fetchRestaurantsByAreaId = (areaId) => {
   const restaurants = db
     .query('SELECT * FROM restaurants WHERE restaurants.area_id = $1', [areaId])
     .then((response) => {
-      return response.rows;
+      if (cuisine) {
+        return response.rows.filter((restaurant) => {
+          return restaurant.cuisine === cuisine;
+        });
+      } else {
+        return response.rows;
+      }
+      // find a way to make a conditional query within the .query -
+      // something like .query('SELECT * FROM restaurants WHERE restaurants.area_id = $1' AND restaurants.cuisine = $2, [areaId, cuisine]
     });
 
   const restaurantCount = db
@@ -43,6 +52,7 @@ const fetchRestaurantsByAreaId = (areaId) => {
     });
 
   return Promise.all([areas, restaurantCount, restaurants]).then((response) => {
+    console.log(response, 'res in promise.all');
     const newObj = {
       area_id: response[0].area_id,
       name: response[0].name,

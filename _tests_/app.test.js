@@ -34,11 +34,12 @@ describe('app', () => {
   });
 
   describe('api/areas/:area_id/restaurants', () => {
-    test('GET 200 - responds with 200 and all restaurants in the given area', () => {
+    test.only('GET 200 - responds with 200 and all restaurants in the given area', () => {
       return request(app)
         .get('/api/areas/1/restaurants')
         .expect(200)
         .then((response) => {
+          console.log(response.body);
           expect(response.body.restaurantsByArea).toMatchObject({
             restaurants: expect.any(Array),
           });
@@ -54,6 +55,15 @@ describe('app', () => {
           // console.log(response, '<---- test')
           expect(response.status).toBe(404);
           expect(response.body.msg).toBe('area not found');
+        });
+    });
+
+    test('GET 200 - responds with restaurants in the given area_id and queried by cuisine', () => {
+      return request(app)
+        .get('/api/areas/1/restaurants?cuisine=Italian')
+        .expect(200)
+        .then((response) => {
+          console.log(response.body.restaurantsByArea, 'in test');
         });
     });
   });
