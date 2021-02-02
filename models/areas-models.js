@@ -46,7 +46,6 @@ const fetchRestaurantsByAreaId = (areaId, cuisine) => {
       if (Object.values(response).length === 0) {
         return Promise.reject({ status: 404, msg: 'cuisine not found' });
       }
-      console.log(response);
       return response;
     });
 

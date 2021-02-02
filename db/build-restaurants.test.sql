@@ -52,7 +52,7 @@ INSERT INTO restaurants(name, area_id, cuisine, website) VALUES ('Mowgli', 2, 'I
 
 -- comments
 INSERT INTO comments(restaurant_id, body) VALUES (1, 'Do not go on a Thursday!');
-INSERT INTO comments(restaurant_id, body) VALUES (2, 'Mowgli Street Food is a disgrace; an insult to not just Indian cuisine but the entire country!');
+INSERT INTO comments(restaurant_id, body) VALUES (2, 'Mowgli Street Food is great!');
 
 
 -- ratings

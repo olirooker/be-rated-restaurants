@@ -18,7 +18,6 @@ const getAreas = (req, res, next) => {
 
 const postAreas = (req, res, next) => {
   const newArea = req.body;
-  console.log(req.body);
   addAreas(newArea)
     .then((area) => {
       res.status(201).send(area);

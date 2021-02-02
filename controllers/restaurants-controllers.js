@@ -1,4 +1,7 @@
-const { addCommentByRestaurantId } = require('../models/restaurants-models.js');
+const {
+  addCommentByRestaurantId,
+  fetchCommentByRestaurantId,
+} = require('../models/restaurants-models.js');
 
 const postCommentByRestaurantId = (req, res, next) => {
   const { restaurant_id } = req.params;
@@ -12,4 +15,13 @@ const postCommentByRestaurantId = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { postCommentByRestaurantId };
+const getCommentByRestaurantId = (req, res, next) => {
+  const { restaurant_id } = req.params;
+  fetchCommentByRestaurantId(restaurant_id)
+    .then((restaurantComments) => {
+      res.status(200).send({ restaurantComments });
+    })
+    .catch(next);
+};
+
+module.exports = { postCommentByRestaurantId, getCommentByRestaurantId };

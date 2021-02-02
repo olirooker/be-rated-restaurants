@@ -118,7 +118,7 @@ describe('app', () => {
   });
 
   describe('/api/restaurants/:restaurant_id/comments', () => {
-    test('should ', () => {
+    test('POST 201 - accepts a new comment object and returns the comment object', () => {
       newComment = {
         body: 'What a place! Delicious food and even better service!',
       };
@@ -138,5 +138,28 @@ describe('app', () => {
           expect(response.body.comment).toHaveProperty('created_at');
         });
     });
+
+    test('GET 200 - responds with an array of comment objects for a given restaurant', () => {
+      return request(app)
+        .get('/api/restaurants/2/comments')
+        .expect(200)
+        .then((response) => {
+          expect(Object.keys(response.body.restaurantComments)).toEqual(
+            expect.objectContaining([
+              'restaurant_id',
+              'name',
+              'area_id',
+              'cuisine',
+              'website',
+              'total_comments',
+            ])
+          );
+          expect(response.body.restaurantComments).toMatchObject({
+            comments: expect.any(Object),
+          });
+        });
+    });
+
+    // next test - repeat above for a 404 on a restaurant_id that doesn't exist
   });
 });
