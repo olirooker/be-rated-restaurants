@@ -3,7 +3,7 @@ const {
   handlePSQLErrors,
   handleCustomErrors,
   handleInternalErrors,
-} = require('./controllers/errors-controller.js');
+} = require('./controllers/errors-controllers.js');
 const app = express();
 const apiRouter = require('./routes/api-router.js');
 

@@ -9,7 +9,7 @@ describe('app', () => {
   afterAll(function () {
     return db.end();
   });
-  describe('api/areas', () => {
+  describe('/api/areas', () => {
     test('GET 200 - responds with status 200 and all areas', () => {
       return request(app)
         .get('/api/areas')
@@ -34,7 +34,7 @@ describe('app', () => {
     });
   });
 
-  describe('api/areas/:area_id/restaurants', () => {
+  describe('/api/areas/:area_id/restaurants', () => {
     test('GET 200 - responds with 200 and all restaurants in the given area', () => {
       return request(app)
         .get('/api/areas/1/restaurants')
@@ -113,6 +113,29 @@ describe('app', () => {
             cuisine: 'Indian',
             website: 'https://www.dheli-2-g-.com',
           });
+        });
+    });
+  });
+
+  describe('/api/restaurants/:restaurant_id/comments', () => {
+    test('should ', () => {
+      newComment = {
+        body: 'What a place! Delicious food and even better service!',
+      };
+
+      return request(app)
+        .post('/api/restaurants/1/comments')
+        .send({ newComment })
+        .set('Accept', 'application/json')
+        .expect(201)
+        .then((response) => {
+          expect(response.body.comment).toHaveProperty('comment_id', 3);
+          expect(response.body.comment).toHaveProperty('restaurant_id', 1);
+          expect(response.body.comment).toHaveProperty(
+            'body',
+            'What a place! Delicious food and even better service!'
+          );
+          expect(response.body.comment).toHaveProperty('created_at');
         });
     });
   });
