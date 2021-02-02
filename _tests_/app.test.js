@@ -34,7 +34,7 @@ describe('app', () => {
   });
 
   describe('api/areas/:area_id/restaurants', () => {
-    test.only('GET 200 - responds with 200 and all restaurants in the given area', () => {
+    test('GET 200 - responds with 200 and all restaurants in the given area', () => {
       return request(app)
         .get('/api/areas/1/restaurants')
         .expect(200)
@@ -52,8 +52,6 @@ describe('app', () => {
         .get('/api/areas/45678/restaurants')
         .expect(404)
         .then((response) => {
-          // console.log(response, '<---- test')
-          expect(response.status).toBe(404);
           expect(response.body.msg).toBe('area not found');
         });
     });
@@ -63,7 +61,34 @@ describe('app', () => {
         .get('/api/areas/1/restaurants?cuisine=Italian')
         .expect(200)
         .then((response) => {
-          console.log(response.body.restaurantsByArea, 'in test');
+          // console.log(response.body.restaurantsByArea, 'in test');
+          expect(response.body.restaurantsByArea).toEqual({
+            area_id: 1,
+            name: 'Woodseats',
+            total_restaurants: 1,
+            restaurants: [
+              {
+                restaurant_id: 1,
+                name: 'Marco',
+                area_id: 1,
+                cuisine: 'Italian',
+                website:
+                  'https://www.tripadvisor.co.uk/Restaurant_Review-g186364-d8065913-Reviews-Marco_s-Sheffield_South_Yorkshire_England.html',
+              },
+            ],
+          });
+          expect(response.body.restaurantsByArea).toMatchObject({
+            restaurants: expect.any(Array),
+          });
+        });
+    });
+
+    test('GET 404 - responds with not found when there is no restaurant in the area serving the given cuisine', () => {
+      return request(app)
+        .get('/api/areas/1/restaurants?cuisine=Chicken')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('cuisine not found');
         });
     });
   });
