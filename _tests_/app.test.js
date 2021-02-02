@@ -20,6 +20,7 @@ describe('app', () => {
           // expect(response.body.totalCount).toBe(5);
         });
     });
+
     test('POST 201 - responds with status 201 and a json object', () => {
       return request(app)
         .post('/api/areas')
@@ -89,6 +90,29 @@ describe('app', () => {
         .expect(404)
         .then((response) => {
           expect(response.body.msg).toBe('cuisine not found');
+        });
+    });
+
+    test('POST 201 - accepts a new restaurant object and responds with the posted restaurant', () => {
+      newRestaurant = {
+        name: 'Delhi 2 Go',
+        cuisine: 'Indian',
+        website: 'https://www.dheli-2-g-.com',
+      };
+
+      return request(app)
+        .post('/api/areas/2/restaurants')
+        .send({ newRestaurant })
+        .set('Accept', 'application/json')
+        .expect(201)
+        .then((response) => {
+          expect(response.body.restaurant).toEqual({
+            restaurant_id: 3,
+            name: 'Delhi 2 Go',
+            area_id: 2,
+            cuisine: 'Indian',
+            website: 'https://www.dheli-2-g-.com',
+          });
         });
     });
   });

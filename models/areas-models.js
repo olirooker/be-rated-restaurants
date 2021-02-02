@@ -67,4 +67,25 @@ const fetchRestaurantsByAreaId = (areaId, cuisine) => {
   });
 };
 
-module.exports = { fetchAreas, addAreas, fetchRestaurantsByAreaId };
+const addRestaurantByAreaId = (newRestaurant) => {
+  return db
+    .query(
+      'INSERT INTO restaurants(name, area_id, cuisine, website) VALUES ($1, $2, $3, $4) RETURNING *',
+      [
+        newRestaurant.name,
+        newRestaurant.area_id,
+        newRestaurant.cuisine,
+        newRestaurant.website,
+      ]
+    )
+    .then((restaurant) => {
+      return restaurant.rows[0];
+    });
+};
+
+module.exports = {
+  fetchAreas,
+  addAreas,
+  fetchRestaurantsByAreaId,
+  addRestaurantByAreaId,
+};

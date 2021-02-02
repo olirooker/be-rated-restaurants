@@ -3,6 +3,7 @@ const {
   fetchAreas,
   addAreas,
   fetchRestaurantsByAreaId,
+  addRestaurantByAreaId,
 } = require('../models/areas-models.js');
 
 const getAreas = (req, res, next) => {
@@ -11,17 +12,18 @@ const getAreas = (req, res, next) => {
       .then(([areas, totalCount]) => {
         res.send({ areas, totalCount });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(next);
   });
 };
 
 const postAreas = (req, res, next) => {
   const newArea = req.body;
-  addAreas(newArea).then((area) => {
-    res.status(201).send(area);
-  });
+  console.log(req.body);
+  addAreas(newArea)
+    .then((area) => {
+      res.status(201).send(area);
+    })
+    .catch(next);
 };
 
 const getRestaurantsByAreaId = (req, res, next) => {
@@ -32,9 +34,24 @@ const getRestaurantsByAreaId = (req, res, next) => {
     .then((restaurantsByArea) => {
       res.status(200).send({ restaurantsByArea });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
-module.exports = { getAreas, postAreas, getRestaurantsByAreaId };
+const postRestaurantByAreaId = (req, res, next) => {
+  const { area_id } = req.params;
+  const { newRestaurant } = req.body;
+  newRestaurant.area_id = parseFloat(area_id);
+
+  addRestaurantByAreaId(newRestaurant)
+    .then((restaurant) => {
+      res.status(201).send({ restaurant });
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getAreas,
+  postAreas,
+  getRestaurantsByAreaId,
+  postRestaurantByAreaId,
+};
