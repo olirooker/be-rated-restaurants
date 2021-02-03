@@ -12,28 +12,28 @@ DROP TABLE IF EXISTS ratings;
 
 CREATE TABLE area (
     area_id SERIAL PRIMARY KEY,
-    name VARCHAR
+    name VARCHAR NOT NULL
     );
 
 CREATE TABLE restaurants (
     restaurant_id SERIAL PRIMARY KEY,
-    name VARCHAR,
+    name VARCHAR NOT NULL,
     area_id INT REFERENCES area(id),
-    cuisine VARCHAR,
-    website VARCHAR
+    cuisine VARCHAR NOT NULL,
+    website VARCHAR NOT NULL
     );
 
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     restaurant_id INT REFERENCES restaurants(id),
-    body VARCHAR,
+    body VARCHAR NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT  CURRENT_TIMESTAMP
     );
 
 CREATE TABLE ratings (
     rating_id SERIAL PRIMARY KEY,
     restaurant_id INT REFERENCES restaurants(id),
-    rating INTEGER ADD CONSTRAINT CHECK(rating <= 5),
+    rating INT CHECK(rating <= 5),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 

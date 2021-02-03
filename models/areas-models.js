@@ -8,11 +8,15 @@ const fetchAreas = () => {
 };
 
 const addAreas = (newArea) => {
-  return db
-    .query('INSERT INTO area (name) VALUES ($1) RETURNING *', [newArea.name])
-    .then((updatedArea) => {
-      return updatedArea.rows[0];
-    });
+  if (typeof newArea.name !== 'string' || !newArea.name) {
+    return Promise.reject({ status: 400, msg: 'Bad request' });
+  } else {
+    return db
+      .query('INSERT INTO area (name) VALUES ($1) RETURNING *', [newArea.name])
+      .then((updatedArea) => {
+        return updatedArea.rows[0];
+      });
+  }
 };
 
 const fetchRestaurantsByAreaId = (areaId, cuisine) => {
@@ -67,6 +71,14 @@ const fetchRestaurantsByAreaId = (areaId, cuisine) => {
 };
 
 const addRestaurantByAreaId = (newRestaurant) => {
+  const values = Object.values(newRestaurant);
+
+  for (let value of values) {
+    if (typeof value !== 'string' || !value) {
+      return Promise.reject({ status: 400, msg: 'Bad request' });
+    }
+  }
+
   return db
     .query(
       'INSERT INTO restaurants(name, area_id, cuisine, website) VALUES ($1, $2, $3, $4) RETURNING *',

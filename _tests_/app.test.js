@@ -32,6 +32,40 @@ describe('app', () => {
           expect(response.body).toHaveProperty('name', 'Endcliffe');
         });
     });
+
+    test('POST 400 - responds with bad request message for an incorrect data type', () => {
+      return request(app)
+        .post('/api/areas')
+        .send({ name: true })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for undefined data on key', () => {
+      return request(app)
+        .post('/api/areas')
+        .send({ name: null })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          console.log(response.body.msg);
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for empty string on key', () => {
+      return request(app)
+        .post('/api/areas')
+        .send({ name: '' })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
   });
 
   describe('/api/areas/:area_id/restaurants', () => {
@@ -115,6 +149,23 @@ describe('app', () => {
           });
         });
     });
+
+    test('POST 400 - responds with bad request message for an incorrect data on the request', () => {
+      newRestaurant = {
+        name: [],
+        cuisine: {},
+        website: true,
+      };
+
+      return request(app)
+        .post('/api/areas/2/restaurants')
+        .send({ newRestaurant })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
   });
 
   describe('/api/restaurants/:restaurant_id/comments', () => {
@@ -182,6 +233,17 @@ describe('app', () => {
           expect(response.body.rating).toHaveProperty('restaurant_id', 2);
           expect(response.body.rating).toHaveProperty('rating', 5);
           expect(response.body.rating).toHaveProperty('created_at');
+        });
+    });
+
+    test('POST 400 - responds with bad request for a rating over 5', () => {
+      return request(app)
+        .post('/api/restaurants/2/ratings')
+        .send({ rating: 6 })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
         });
     });
 
