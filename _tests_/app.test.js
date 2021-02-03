@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'test';
 
 const request = require('supertest');
 const db = require('../db/index.js');
-const { response } = require('../app.js');
 
 describe('app', () => {
   afterAll(function () {
@@ -323,6 +322,29 @@ describe('app', () => {
         .set('Accept', 'application/json')
         .expect(400)
         .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for an incorrect data type', () => {
+      return request(app)
+        .post('/api/restaurants/2/ratings')
+        .send({ rating: true })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for undefined data on key', () => {
+      return request(app)
+        .post('/api/restaurants/2/ratings')
+        .send({ rating: null })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          console.log(response.body.msg);
           expect(response.body.msg).toBe('Bad request');
         });
     });

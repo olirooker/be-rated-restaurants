@@ -55,6 +55,10 @@ const fetchCommentByRestaurantId = (restaurant_id) => {
 };
 
 const addRatingByRestaurantId = (rating) => {
+  if (!rating.rating) {
+    return Promise.reject({ status: 400, msg: 'Bad request' });
+  }
+
   return db
     .query(
       'INSERT INTO ratings(restaurant_id, rating) VALUES ($1, $2) RETURNING *',

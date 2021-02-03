@@ -71,10 +71,8 @@ const fetchRestaurantsByAreaId = (areaId, cuisine) => {
 };
 
 const addRestaurantByAreaId = (newRestaurant) => {
-  const values = Object.values(newRestaurant);
-
-  for (let value of values) {
-    if (typeof value !== 'string' || !value) {
+  for (let [key, value] of Object.entries(newRestaurant)) {
+    if (!value || (typeof value !== 'string' && key !== 'area_id')) {
       return Promise.reject({ status: 400, msg: 'Bad request' });
     }
   }
