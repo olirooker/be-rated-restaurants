@@ -160,6 +160,13 @@ describe('app', () => {
         });
     });
 
-    // next test - repeat above for a 404 on a restaurant_id that doesn't exist
+    test('GET 404 - responds with not found if the restaurant_id does not exist', () => {
+      return request(app)
+        .get('/api/restaurants/99999/comments')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('restaurant not found');
+        });
+    });
   });
 });
