@@ -150,11 +150,45 @@ describe('app', () => {
         });
     });
 
-    test('POST 400 - responds with bad request message for an incorrect data on the request', () => {
+    test('POST 400 - responds with bad request message for any incorrect data type on the request', () => {
       newRestaurant = {
-        name: [],
-        cuisine: {},
+        name: 'The Greedy Greek',
+        cuisine: 'Greek',
         website: true,
+      };
+
+      return request(app)
+        .post('/api/areas/2/restaurants')
+        .send({ newRestaurant })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for any undefined data on the request', () => {
+      newRestaurant = {
+        name: 'Two Steps',
+        cuisine: 'Fish and Chips',
+        website: null,
+      };
+
+      return request(app)
+        .post('/api/areas/2/restaurants')
+        .send({ newRestaurant })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for any empty string on the request', () => {
+      newRestaurant = {
+        name: '',
+        cuisine: 'Chicken',
+        website: 'www.chicken.com',
       };
 
       return request(app)
