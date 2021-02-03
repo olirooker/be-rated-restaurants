@@ -226,4 +226,80 @@ describe('app', () => {
         });
     });
   });
+
+  describe('Error handling', () => {
+    test('GET 404 - responds with 404 not found for non-existent routes', () => {
+      return request(app)
+        .get('/nope!')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toEqual('Route not found!');
+        });
+    });
+
+    test('405 /api/ - responds with 405 message for invalid methods', () => {
+      const invalidMethods = ['get', 'post', 'delete', 'patch', 'put'];
+      const requestPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/')
+          .expect(405)
+          .then((response) => {
+            expect(response.body.msg).toBe('Method not allowed!');
+          });
+      });
+      return Promise.all(requestPromises);
+    });
+
+    test('405 /api/areas - responds with 405 message for invalid methods', () => {
+      const invalidMethods = ['delete', 'patch', 'put'];
+      const requestPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/areas')
+          .expect(405)
+          .then((response) => {
+            expect(response.body.msg).toBe('Method not allowed!');
+          });
+      });
+      return Promise.all(requestPromises);
+    });
+
+    test('405 /api/areas/:area_id/restaurants - responds with 405 message for invalid methods', () => {
+      const invalidMethods = ['delete', 'patch', 'put'];
+      const requestPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/areas/1/restaurants')
+          .expect(405)
+          .then((response) => {
+            expect(response.body.msg).toBe('Method not allowed!');
+          });
+      });
+      return Promise.all(requestPromises);
+    });
+
+    test('405 /api/restaurants/restaurant_id/comments - responds with 405 message for invalid methods', () => {
+      const invalidMethods = ['delete', 'patch', 'put'];
+      const requestPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/restaurants/1/comments')
+          .expect(405)
+          .then((response) => {
+            expect(response.body.msg).toBe('Method not allowed!');
+          });
+      });
+      return Promise.all(requestPromises);
+    });
+
+    test('405 /api/restaurants/restaurant_id/ratings - responds with 405 message for invalid methods', () => {
+      const invalidMethods = ['delete', 'patch', 'put'];
+      const requestPromises = invalidMethods.map((method) => {
+        return request(app)
+          [method]('/api/restaurants/1/ratings')
+          .expect(405)
+          .then((response) => {
+            expect(response.body.msg).toBe('Method not allowed!');
+          });
+      });
+      return Promise.all(requestPromises);
+    });
+  });
 });

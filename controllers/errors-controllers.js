@@ -1,3 +1,11 @@
+const send404 = (req, res, next) => {
+  res.status(404).send({ msg: 'Route not found!' });
+};
+
+const send405 = (req, res, next) => {
+  res.status(405).send({ msg: 'Method not allowed!' });
+};
+
 const handlePSQLErrors = (err, req, res, next) => {
   const badReqCodes = ['22P02'];
   const notFoundCodes = ['23503'];
@@ -23,4 +31,10 @@ const handleInternalErrors = (err, req, res, next) => {
   res.status(500).send({ msg: 'Internal server error' });
 };
 
-module.exports = { handlePSQLErrors, handleCustomErrors, handleInternalErrors };
+module.exports = {
+  send404,
+  send405,
+  handlePSQLErrors,
+  handleCustomErrors,
+  handleInternalErrors,
+};

@@ -1,5 +1,6 @@
 const express = require('express');
 const {
+  send404,
   handlePSQLErrors,
   handleCustomErrors,
   handleInternalErrors,
@@ -9,6 +10,7 @@ const apiRouter = require('./routes/api-router.js');
 
 app.use(express.json());
 app.use('/api', apiRouter);
+app.all('/*', send404);
 
 // error-handling middleware
 app.use(handlePSQLErrors);
