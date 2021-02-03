@@ -169,4 +169,20 @@ describe('app', () => {
         });
     });
   });
+
+  describe('/api/restaurants/:restaurant_id/ratings', () => {
+    test('POST 201 - accepts a new ratings object and returns the ratings object', () => {
+      return request(app)
+        .post('/api/restaurants/2/ratings')
+        .send({ rating: 5 })
+        .set('Accept', 'application/json')
+        .expect(201)
+        .then((response) => {
+          expect(response.body.rating).toHaveProperty('rating_id', 3);
+          expect(response.body.rating).toHaveProperty('restaurant_id', 2);
+          expect(response.body.rating).toHaveProperty('rating', 5);
+          expect(response.body.rating).toHaveProperty('created_at');
+        });
+    });
+  });
 });

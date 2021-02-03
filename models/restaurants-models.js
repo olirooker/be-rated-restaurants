@@ -50,4 +50,19 @@ const fetchCommentByRestaurantId = (restaurant_id) => {
   });
 };
 
-module.exports = { addCommentByRestaurantId, fetchCommentByRestaurantId };
+const addRatingByRestaurantId = (rating) => {
+  return db
+    .query(
+      'INSERT INTO ratings(restaurant_id, rating) VALUES ($1, $2) RETURNING *',
+      [rating.restaurant_id, rating.rating]
+    )
+    .then((rating) => {
+      return rating.rows[0];
+    });
+};
+
+module.exports = {
+  addCommentByRestaurantId,
+  fetchCommentByRestaurantId,
+  addRatingByRestaurantId,
+};
