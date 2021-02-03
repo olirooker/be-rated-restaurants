@@ -184,5 +184,16 @@ describe('app', () => {
           expect(response.body.rating).toHaveProperty('created_at');
         });
     });
+
+    test('POST 404 - accepts a new ratings object and returns the ratings object', () => {
+      return request(app)
+        .post('/api/restaurants/22254/ratings')
+        .send({ rating: 5 })
+        .set('Accept', 'application/json')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('Not found');
+        });
+    });
   });
 });
