@@ -1,14 +1,18 @@
 const db = require('../db/index.js');
 
 const addCommentByRestaurantId = (newComment) => {
-  return db
-    .query(
-      'INSERT INTO comments(restaurant_id, body) VALUES ($1, $2) RETURNING *',
-      [newComment.restaurant_id, newComment.body]
-    )
-    .then((comment) => {
-      return comment.rows[0];
-    });
+  if (typeof newComment.body !== 'string' || !newComment.body) {
+    return Promise.reject({ status: 400, msg: 'Bad request' });
+  } else {
+    return db
+      .query(
+        'INSERT INTO comments(restaurant_id, body) VALUES ($1, $2) RETURNING *',
+        [newComment.restaurant_id, newComment.body]
+      )
+      .then((comment) => {
+        return comment.rows[0];
+      });
+  }
 };
 
 const fetchCommentByRestaurantId = (restaurant_id) => {

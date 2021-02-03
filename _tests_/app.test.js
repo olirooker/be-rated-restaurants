@@ -224,6 +224,52 @@ describe('app', () => {
         });
     });
 
+    test('POST 400 - responds with bad request message for an incorrect data type', () => {
+      newComment = {
+        body: true,
+      };
+
+      return request(app)
+        .post('/api/restaurants/1/comments')
+        .send({ newComment })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for undefined data on key', () => {
+      newComment = {
+        body: null,
+      };
+
+      return request(app)
+        .post('/api/restaurants/1/comments')
+        .send({ newComment })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          console.log(response.body.msg);
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
+    test('POST 400 - responds with bad request message for empty string on key', () => {
+      newComment = {
+        body: '',
+      };
+
+      return request(app)
+        .post('/api/restaurants/1/comments')
+        .send({ newComment })
+        .set('Accept', 'application/json')
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe('Bad request');
+        });
+    });
+
     test('GET 200 - responds with an array of comment objects for a given restaurant', () => {
       return request(app)
         .get('/api/restaurants/2/comments')
