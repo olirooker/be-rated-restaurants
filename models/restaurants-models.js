@@ -61,8 +61,48 @@ const addRatingByRestaurantId = (rating) => {
     });
 };
 
+const fetchRatingByRestaurantId = (restaurant_id) => {
+  const rating = db
+    .query('SELECT * FROM ratings WHERE restaurant_id = $1', [restaurant_id])
+    .then((response) => {
+      return response.rows;
+    });
+
+  const ratingCount = db
+    .query('SELECT * FROM ratings WHERE restaurant_id = $1', [restaurant_id])
+    .then((response) => {
+      return response.rowCount;
+    });
+
+  const restaurant = db
+    .query('SELECT * FROM restaurants WHERE restaurant_id = $1', [
+      restaurant_id,
+    ])
+    .then((response) => {
+      if (!response.rows.length) {
+        return Promise.reject({ status: 404, msg: 'restaurant not found' });
+      } else {
+        return response.rows[0];
+      }
+    });
+  return Promise.all([rating, ratingCount, restaurant]).then((response) => {
+    const ratingObj = {
+      restaurant_id: response[2].restaurant_id,
+      area_id: response[2].area_id,
+      name: response[2].name,
+      cuisine: response[2].cuisine,
+      website: response[2].website,
+      total_ratings: response[1],
+      ratings: response[0],
+    };
+
+    return ratingObj;
+  });
+};
+
 module.exports = {
   addCommentByRestaurantId,
   fetchCommentByRestaurantId,
   addRatingByRestaurantId,
+  fetchRatingByRestaurantId,
 };

@@ -195,5 +195,35 @@ describe('app', () => {
           expect(response.body.msg).toBe('Not found');
         });
     });
+
+    test('GET 200 - responds with a ratings object with the correct key/value pairs for a given restaurant', () => {
+      return request(app)
+        .get('/api/restaurants/1/ratings')
+        .expect(200)
+        .then((response) => {
+          expect(Object.keys(response.body.restaurantRating)).toEqual(
+            expect.objectContaining([
+              'restaurant_id',
+              'area_id',
+              'name',
+              'cuisine',
+              'website',
+              'total_ratings',
+            ])
+          );
+          expect(response.body.restaurantRating).toMatchObject({
+            ratings: expect.any(Object),
+          });
+        });
+    });
+
+    test('GET 404 - responds with not found if the restaurant_id does not exist', () => {
+      return request(app)
+        .get('/api/restaurants/99999/ratings')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('restaurant not found');
+        });
+    });
   });
 });

@@ -2,6 +2,7 @@ const {
   addCommentByRestaurantId,
   fetchCommentByRestaurantId,
   addRatingByRestaurantId,
+  fetchRatingByRestaurantId,
 } = require('../models/restaurants-models.js');
 
 const postCommentByRestaurantId = (req, res, next) => {
@@ -36,8 +37,18 @@ const postRatingByRestaurantId = (req, res, next) => {
     .catch(next);
 };
 
+const getRatingByRestaurantId = (req, res, next) => {
+  const { restaurant_id } = req.params;
+  fetchRatingByRestaurantId(restaurant_id)
+    .then((restaurantRating) => {
+      res.status(200).send({ restaurantRating });
+    })
+    .catch(next);
+};
+
 module.exports = {
   postCommentByRestaurantId,
   getCommentByRestaurantId,
   postRatingByRestaurantId,
+  getRatingByRestaurantId,
 };
